@@ -97,7 +97,7 @@ def installWslTools():
     password = input('Please enter the password you use for the WSL, '+
                      'so this program can install the necessary tools: ')
     
-    cmd = f'{prefix} bash -c "echo {password} | sudo -S apt install pandoc npm texlive-full"'
+    cmd = f'{prefix} bash -c "echo {password} | sudo -S apt install -y pandoc npm texlive-full"'
     sp.check_call(cmd, shell=True)
 
     os.mkdir('.tmpInstall')
