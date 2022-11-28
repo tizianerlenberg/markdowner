@@ -30,16 +30,24 @@ def main():
     if installer.isAlreadyInstalled('markdowner') == False:
         input('Not installed correctly, please run installer. Press ENTER to exit program.')
     else:
-        import argparse
+        import argparse, sys
 
         parser = argparse.ArgumentParser(description=
             """Markdowner is a cross platform Markdown to PDF converter.
             It uses pandoc, latex and prettier internally.""")
+        #if '--uninstall' in sys.argv:
+        #    parser.add_argument("sourceFile", help = "path to markdown source file", nargs='?')
+        #else:
         parser.add_argument("sourceFile", help = "path to markdown source file")
         parser.add_argument('-np', '--do-not-prettiefy', action='store_true',
             help="this will make the program not use the prettifier on your source file")
+        #parser.add_argument('--uninstall', action='store_true',
+        #    help="use this to remove the program from your computer")
         args = parser.parse_args()
 
+        #if args.uninstall:
+        #    install_markdowner.uninstallAll()
+        #else:
         startOfProgram(args.sourceFile, prettiefy=not args.do_not_prettiefy)
 
 if __name__ == '__main__':

@@ -1,6 +1,6 @@
 from pathlib import Path
 from zipfile import ZipFile
-import os, sys, platform
+import os, sys, platform, shutil
 
 def getInternalFilePath(nameOfZip):
     try:
@@ -93,7 +93,8 @@ def uninstall(nameOfProgram):
                     ")" +
                 "\"")
         sp.check_call(cmd, shell=True)
-        unsetDoneFlag(nameOfProgram)
+
+        shutil.rmtree(getInstallPath(nameOfProgram))
     else:
         pass
         #TODO
@@ -107,15 +108,23 @@ def continueYesNo(message):
     else:
         return False
 
-def interactiveInstall(nameOfProgram, addToPathVar=False, beforeInstall=None, afterInstall=None):
+def interactiveUninstall(nameOfProgram, beforeUninstall=None, afterUninstall=None):
+    message = ('============= UNISNTALLER =============\n' +
+               f'Do you REALLY want to uninstall \"{nameOfProgram}\" from your system?')
+    if continueYesNo(message):
+        if beforeUninstall:
+            beforeUninstall()
+        uninstall(nameOfProgram)
+        if afterUninstall:
+            afterUninstall()
+    input("Program successfully uninstalled. To exit press ENTER: ")
+    sys.exit(1)
+
+def interactiveInstall(nameOfProgram, addToPathVar=False, beforeInstall=None, afterInstall=None, beforeUninstall=None, afterUninstall=None):
     if isAlreadyInstalled(nameOfProgram):
-        message = ('Program is already installed on your computer.\n' +
-                   'Therefore the uninstaller is beeing started.\n\n' +
-                   '============= UNISNTALLER =============\n' +
-                   f'Do you REALLY want to uninstall \"{nameOfProgram}\" from your system?')
-        if continueYesNo(message):
-            uninstall(nameOfProgram)
-        sys.exit(1)
+        print('Program is already installed on your computer.\n' +
+              'Therefore the uninstaller is beeing started.\n\n')
+        interactiveUninstall(nameOfProgram, beforeUninstall=beforeUninstall, afterUninstall=afterUninstall)
 
     message = (f"This is an installer for {nameOfProgram}. " + 
                "It will install the Program on your computer.")

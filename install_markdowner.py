@@ -2,6 +2,9 @@ import subprocess as sp
 import platform
 import installer
 import sys
+import os
+import shutil
+from pathlib import Path
 
 class globVars():
     pass
@@ -97,8 +100,10 @@ def installWslTools():
     cmd = f'{prefix} bash -c "echo {password} | sudo -S apt install pandoc npm texlive-full"'
     sp.check_call(cmd, shell=True)
 
-    cmd = f'{prefix} bash -c "npm install --save-dev --save-exact prettier"'
+    os.mkdir('.tmpInstall')
+    cmd = f'{prefix} bash -c "cd .tmpInstall; npm install --save-dev --save-exact prettier"'
     sp.check_call(cmd, shell=True)
+    shutil.rmtree('.tmpInstall')
 
 def installAll():
     if platform.system() == "Windows":
@@ -114,6 +119,18 @@ def installAll():
             #TODO
     
     installer.interactiveInstall('markdowner', beforeInstall=beforeInstall, addToPathVar=True)
+
+def uninstallAll():
+    if platform.system() == "Windows":
+        def beforeUninstall():
+            pass
+            #TODO
+    else:
+        def beforeUninstall():
+            pass
+            #TODO
+    
+    installer.interactiveUninstall('markdowner', beforeUninstall=beforeUninstall)
 
 def main():
     installAll()
