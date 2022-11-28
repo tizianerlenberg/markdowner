@@ -65,7 +65,7 @@ def install(nameOfProgram, addToPathVar=False, setFlag=True):
         setDoneFlag(nameOfProgram)
     return 0
 
-def uninstall(nameOfProgram):
+def uninstall(nameOfProgram, selfUninstall=False):
     import subprocess as sp
     if platform.system() == "Windows":
         cmd = "powershell -Command \"[Environment]::GetEnvironmentVariable('PATH', 'User')\""
@@ -94,7 +94,24 @@ def uninstall(nameOfProgram):
                 "\"")
         sp.check_call(cmd, shell=True)
 
-        shutil.rmtree(getInstallPath(nameOfProgram))
+        if selfUninstall:
+            if platform.system() == "Windows":
+                mypath = Path(os.path.expanduser('~')) / Path('AppData/Local/Temp')
+                myDeleter = mypath / Path(nameOfProgram + '_uninstaller.bat')
+                with open(myDeleter, "w") as file:
+                    file.write(r'@echo off"' + '\n')
+                    file.write(r'timeout /t 1' + '\n')
+                    file.write(r'rmdir /s /q "' + str(getInstallPath(nameOfProgram)) + '"' + '\n')
+                    file.write(r'del /q "' + str(myDeleter) + '"' + '\n')
+                input("This program will end and a window will open, which finalizes the uninstall.\n" + 
+                      "To continue press ENTER: ")
+                sp.Popen("start /min cmd.exe /c \"" + str(myDeleter) + "\"", shell=True)
+                sys.exit(0)
+            else:
+                pass
+                #TODO
+        else:
+            shutil.rmtree(getInstallPath(nameOfProgram))
     else:
         pass
         #TODO
@@ -108,17 +125,20 @@ def continueYesNo(message):
     else:
         return False
 
-def interactiveUninstall(nameOfProgram, beforeUninstall=None, afterUninstall=None):
+def interactiveUninstall(nameOfProgram, beforeUninstall=None, afterUninstall=None, selfUninstall=False):
     message = ('============= UNISNTALLER =============\n' +
                f'Do you REALLY want to uninstall \"{nameOfProgram}\" from your system?')
     if continueYesNo(message):
         if beforeUninstall:
             beforeUninstall()
-        uninstall(nameOfProgram)
+        uninstall(nameOfProgram, selfUninstall=selfUninstall)
         if afterUninstall:
             afterUninstall()
+    else:
+        print("Aborting uninstall")
+        sys.exit(0)
     input("Program successfully uninstalled. To exit press ENTER: ")
-    sys.exit(1)
+    sys.exit(0)
 
 def interactiveInstall(nameOfProgram, addToPathVar=False, beforeInstall=None, afterInstall=None, beforeUninstall=None, afterUninstall=None):
     if isAlreadyInstalled(nameOfProgram):
@@ -146,8 +166,6 @@ def interactiveInstall(nameOfProgram, addToPathVar=False, beforeInstall=None, af
 
 def main():
     pass
-    #interactiveInstall('testProgram')
-    uninstall('markdowner')
 
 if __name__ == '__main__':
     main()

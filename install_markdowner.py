@@ -120,7 +120,7 @@ def installAll():
     
     installer.interactiveInstall('markdowner', beforeInstall=beforeInstall, addToPathVar=True)
 
-def uninstallAll():
+def uninstallAll(selfUninstall=False):
     if platform.system() == "Windows":
         def beforeUninstall():
             pass
@@ -130,7 +130,7 @@ def uninstallAll():
             pass
             #TODO
     
-    installer.interactiveUninstall('markdowner', beforeUninstall=beforeUninstall)
+    installer.interactiveUninstall('markdowner', beforeUninstall=beforeUninstall, selfUninstall=selfUninstall)
 
 def main():
     installAll()
