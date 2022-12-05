@@ -36,7 +36,7 @@ def checkWslStatus():
     return 'NOT DEFINED'
 
 def checkAdminStatus():
-    cmd = "net session"
+    cmd = r'powershell.exe -Command "[bool](([System.Security.Principal.WindowsIdentity]::GetCurrent()).groups -match \"S-1-5-32-544\")"'
     sess = sp.Popen(cmd,
                     shell=True,
                     stdout=sp.PIPE,
@@ -44,9 +44,9 @@ def checkAdminStatus():
     rc = sess.wait()
     out,err=sess.communicate()
 
-    if err.decode().startswith('System error 5 has occurred.'):
+    if out.decode().startswith('False'):
         return False
-    elif out.decode().startswith('There are no entries in the list.'):
+    elif out.decode().startswith('True'):
         return True
     else:
         raise Exception("Can't determine administrator status") 
