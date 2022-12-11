@@ -4,7 +4,7 @@
 #include "path.iss"
 
 #define MyAppName "markdowner"
-#define MyAppVersion "1.0"
+#define MyAppVersion "10.0"
 #define MyAppPublisher "Tizian Erlenberg"
 #define MyAppURL "https://github.com/tizianerlenberg/markdowner"
 #define MyAppExeName "markdowner.exe"
