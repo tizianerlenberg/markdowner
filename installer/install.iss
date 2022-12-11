@@ -27,7 +27,8 @@ InfoBeforeFile=C:\Users\Tizian Erlenberg\MyDocuments\Basteln\Programmieren\Pytho
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 ;PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
-OutputBaseFilename=mysetup
+OutputDir=C:\Users\Tizian Erlenberg\MyDocuments\Basteln\Programmieren\Python\markdowner\installerDist
+OutputBaseFilename=win_installer
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
@@ -36,7 +37,8 @@ WizardStyle=modern
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Files]
-Source: "C:\Users\Tizian Erlenberg\MyDocuments\Basteln\Programmieren\Python\markdowner\dist\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\Users\Tizian Erlenberg\MyDocuments\Basteln\Programmieren\Python\markdowner\dist\markdowner\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\Users\Tizian Erlenberg\MyDocuments\Basteln\Programmieren\Python\markdowner\misc\*"; DestDir: "{app}\misc"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Code]
