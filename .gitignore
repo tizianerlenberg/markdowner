@@ -163,3 +163,9 @@ config.py
 *.key
 compDir/
 package.zip
+bin/
+misc/
+*.spec
+dist/
+build/
+installerDist/
